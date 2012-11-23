@@ -1,0 +1,39 @@
+#!/bin/python
+
+import time
+import threading
+import sys
+
+class ArduinoReader(threading.Thread):
+	"Reads data from Arduino on serial"
+
+	def __init__(self,serialport,interval):
+		threading.Thread.__init__(self)
+
+		self.datain = {}
+		self.interval = interval
+		self.tmpCounter = 0
+		self.killed = False
+
+	def run(self):
+		while not self.killed:
+			print "Beep"+str(self.tmpCounter)
+			self.datain[self.tmpCounter] = self.tmpCounter
+
+			self.tmpCounter += 1
+			time.sleep(self.interval);
+	def kill(self):
+		print "BLLAAAHHH"
+		self.killed = True
+		sys.exit()
+
+
+t = ArduinoReader('',5)
+t.start()
+
+for i in range(1,10) :
+	print "==============================="
+	print t.datain
+	time.sleep(3)
+
+t.kill()
